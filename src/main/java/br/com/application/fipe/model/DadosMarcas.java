@@ -7,6 +7,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public record DadosMarcas(
     @JsonAlias("codigo") String codigo,
     @JsonAlias("nome") String nome
-) {
-
+    ) {
+        @Override 
+        public String toString() {
+            return "Código:%s - Nome:%s".formatted(this.codigo, this.nome);
+        }
 }

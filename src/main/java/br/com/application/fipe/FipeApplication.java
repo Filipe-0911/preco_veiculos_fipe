@@ -1,15 +1,10 @@
 package br.com.application.fipe;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import br.com.application.fipe.model.DadosMarcas;
-import br.com.application.fipe.service.ConsumoApi;
-import br.com.application.fipe.service.ConverteDados;
+import br.com.application.fipe.principal.Principal;
 
 @SpringBootApplication
 public class FipeApplication implements CommandLineRunner {
@@ -20,17 +15,9 @@ public class FipeApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		String url = "https://parallelum.com.br/fipe/api/v1/carros/marcas/";
+		Principal menu = new Principal();
+		menu.exibeMenu();
 		
-		List<DadosMarcas> listaMarcas = new ArrayList<>(); 
-		
-		ConsumoApi connect = new ConsumoApi();
-		String json = connect.obterDados(url);
-		ConverteDados conversor = new ConverteDados();
-
-		DadosMarcas dados = conversor.obterDados(json, DadosMarcas.class);
-
-		System.out.println(dados);
 	}
 
 }
