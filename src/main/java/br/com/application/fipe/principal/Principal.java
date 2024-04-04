@@ -76,9 +76,8 @@ public class Principal {
 
         listaDosAnosVeiculo.stream().forEach(System.out::println);
 
-
         // Escolha o ano do seu veiculo
-        System.out.println("Escolha o ano do seu veículo: ");
+        System.out.println("Escolha o código do seu veículo: ");
         String anoModeloVeiculo = in.next();
 
         url += anoModeloVeiculo;
