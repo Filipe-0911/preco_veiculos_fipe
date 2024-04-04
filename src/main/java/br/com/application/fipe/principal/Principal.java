@@ -4,18 +4,20 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
 
-import br.com.application.fipe.model.DadosMarcas;
+import br.com.application.fipe.model.Dados;
 import br.com.application.fipe.model.DadosModelos;
 import br.com.application.fipe.model.DadosVeiculo;
 import br.com.application.fipe.service.ConsumoApi;
 import br.com.application.fipe.service.ConverteDados;
 
 public class Principal {
-    private String URL_BASE = "https://parallelum.com.br/fipe/api/v1/%s/marcas/";
+    private final String URL_BASE = "https://parallelum.com.br/fipe/api/v1/%s/marcas/";
     private Scanner in = new Scanner(System.in);
     private ConsumoApi connect = new ConsumoApi();
-    private ConverteDados<DadosMarcas> conversor = new ConverteDados<>();
+    private ConverteDados<Dados> conversor = new ConverteDados<>();
     private String json;
+    private String numeroMarca;
+    private String opcao;
 
     public void exibeMenu() {
         System.out.println("Digite o NÚMERO da opção que deseja pesquisar: ");
@@ -24,7 +26,6 @@ public class Principal {
         System.out.println("3- Caminhões;");
 
         int escolha = in.nextInt();
-        String opcao = "";
 
         switch (escolha) {
             case 1:
@@ -41,16 +42,18 @@ public class Principal {
         String url = URL_BASE.formatted(opcao);
         json = connect.obterDados(url);
 
-        List<DadosMarcas> listaDadosMarcas = conversor.obterLista(json, DadosMarcas.class);
+        List<Dados> listaDadosMarcas = conversor.obterLista(json, Dados.class);
 
         listaDadosMarcas.stream()
-                .sorted(Comparator.comparing(DadosMarcas::nome))
+                .sorted(Comparator.comparing(Dados::nome))
                 .forEach(System.out::println);
 
         // MODELOS
         System.out.println("Digite o numero da marca que deseja verificar: ");
-        String numeroMarca = in.next();
-        json = connect.obterDados(url + numeroMarca + "/modelos/");
+        numeroMarca = in.next();
+        url += numeroMarca + "/modelos/";
+
+        json = connect.obterDados(url);
 
         DadosModelos listaDadosModelos = conversor.obterDados(json, DadosModelos.class);
 
@@ -65,17 +68,24 @@ public class Principal {
         System.out.println("Digite o código do carro que você deseja verificar: ");
         String codigoModeloVeiculo = in.next();
 
-        json = connect.obterDados(url + numeroMarca + "/modelos/" + codigoModeloVeiculo + "/anos/");
+        url+= codigoModeloVeiculo + "/anos/";
+
+        json = connect.obterDados(url);
         
-        List<DadosMarcas> listaDosAnosVeiculo = conversor.obterLista(json, DadosMarcas.class);
+        List<Dados> listaDosAnosVeiculo = conversor.obterLista(json, Dados.class);
 
         listaDosAnosVeiculo.stream().forEach(System.out::println);
+
 
         // Escolha o ano do seu veiculo
         System.out.println("Escolha o ano do seu veículo: ");
         String anoModeloVeiculo = in.next();
-        json = connect.obterDados(url + numeroMarca + "/modelos/" + codigoModeloVeiculo + "/anos/" + anoModeloVeiculo);
+
+        url += anoModeloVeiculo;
+
+        json = connect.obterDados(url);
         DadosVeiculo dadosVeiculo = conversor.obterDados(json, DadosVeiculo.class);
+
 
         // Dados do veículo escolhido
         System.out.println("Estes são os dados do veículo que você escolheu: ");

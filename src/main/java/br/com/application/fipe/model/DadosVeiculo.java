@@ -13,4 +13,12 @@ public record DadosVeiculo(String TipoVeiculo,
                     String MesReferencia,
                     String SiglaCombustivel) {
 
+    @Override
+    public String toString() {
+        String dadosVeiculo = "Modelo: %s;\nMarca:%s;\nValor: %s;\nAno Modelo: %s;\nCombustível: %s;\nMes de Referência: %s;\nCódigo Fipe: %s"
+        .formatted(this.TipoVeiculo, this.Marca, this.Valor, this.AnoModelo, this.Combustivel, this.MesReferencia, this.CodigoFipe);
+
+        return dadosVeiculo;
+    }
+
 }
